@@ -1,0 +1,121 @@
+
+var config = {
+    type: Phaser.AUTO,
+    width: 912,
+    height: 480,
+    physics: {  // definimos las fisicas
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+var game = new Phaser.Game(config)
+var player;
+var platforms;
+
+function preload ()
+{
+    // cargar fondos
+    this.load.image('background_1','/assets/Backgrounds/Background_forrest/background_Forrest_parallax_1.png');
+    this.load.image('background_2','/assets/Backgrounds/Background_forrest/background_Forrest_parallax_2.png');
+    this.load.image('background_3','/assets/Backgrounds/Background_forrest/background_Forrest_parallax_3.png');
+    this.load.image('background_4','/assets/Backgrounds/Background_forrest/background_Forrest_parallax_4.png');
+    
+    // cargar piso
+    this.load.image('grass_platform', 'assets/Tile Sets/Dirt-GrassTop_one.png');
+
+    // animaciones jugador
+    this.load.spritesheet('Knight_run','assets/Character Sprites/Knight_1/Knight_1_RunningSwordShieldAnimation.png',{ frameWidth: 16, frameHeight: 32 });// kanig animacion walk
+    this.load.spritesheet('Knight_jump','assets/Character Sprites/Knight_1/Knight_1_JumpSwordShieldAnimation.png',{ frameWidth: 32, frameHeight: 32 });// knight animacion jump
+    this.load.spritesheet('Knight_die','assets/Character Sprites/Knight_1/Knight_1_DeathAnimation.png',{ frameWidth: 16, frameHeight: 24 });// kanig animacion die
+    this.load.spritesheet('Knight_atack','assets/Character Sprites/Knight_1/Knight_1_SwordShieldAttackAnimation.png',{ frameWidth: 32, frameHeight: 32 });// kanig animacion attack
+}
+
+function create ()
+{
+    //this.input.mouse.disableContextMenu();
+    // Esta línea crea el objeto 'cursors' con cuatro propiedades: up, down, left, right.
+    cursors = this.input.keyboard.createCursorKeys();
+
+    // this.world.setBounds(0, 0, 5000, 600); // para ampliar la zona de juego ?
+    this.add.image(456, 240, 'background_1').setScale(3);    // fondo azul
+    platforms = this.physics.add.staticGroup(); // creando un grupo de plataformas
+
+    // Añadiendo plataformas al mapa
+    platforms.create(160, 464, 'grass_platform').setScale(2); // agregando el piso
+
+      /********************************************************************** */
+    // jugador.
+    player = this.physics.add.sprite(100, 300, 'Knight_run').setScale(1.5); // añadiendo fisicas al jugador
+    player.setBounce(0.1); // se le agrega rebote de 0.1 al personaje
+    player.body.setGravityY(300); // añadiendo gravedad al jugador
+    
+    // Animaciones del personaje
+    this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'Knight_run', frame: 4 } ],
+        frameRate: 20
+    });
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('Knight_run', { start: 0, end: 6 }),
+        frameRate: 10,
+        repeat: -1 
+    });
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('Knight_run', { start: 0, end: 6 }),
+        frameRate: 20
+    });
+    this.anims.create({
+        key: 'jump',
+        frames: this.anims.generateFrameNumbers('Knight_jump', { start: 2, end: 5 }),
+        frameRate: 8
+    });
+    this.anims.create({
+        key: 'atack',
+        frames: this.anims.generateFrameNumbers('Knight_atack', { start: 0, end: 3 }),
+        frameRate: 20,
+        repeat: -1 
+    });
+}
+
+function update ()
+{
+    var pointer = this.input.activePointer;
+    this.physics.add.collider(player, platforms); // collider entre el personaje y el grupo de objetos platforms
+    
+    // capturando mouse
+    if(pointer.isDown){
+        player.anims.play('atack');
+    }
+    
+    // capturando eventos del teclado
+    if (cursors.left.isDown){// si se preciona la tecla left
+        player.setVelocityX(-160); // se aplica una velocidad negativa  
+        player.anims.play('left',true); // se ejecuta la animacion left
+        player.flipX = true; // para voltear al jugador
+    }
+    else if (cursors.right.isDown){
+        player.setVelocityX(160);
+        player.anims.play('right', true);
+        player.flipX = false; 
+    }
+    else if (cursors.up.isDown){
+        player.anims.play('jump',true);
+    }
+    else{
+        player.setVelocityX(0);
+        player.anims.play('turn');
+    }
+    if(cursors.up.isDown && player.body.touching.down){
+    player.setVelocityY(-400); // valor del salto
+    }
+} 

@@ -1,0 +1,8 @@
+https://docs.idew.org/video-game/project-outline/1-7-phaser-practice-3-side-scrolling-game/p3-steps-1-5#step-3-resize-game-world-and-add-background
+
+
+
+https://docs.idew.org/video-game/project-outline/1-5-phaser-practice-1-matching-game/p1-steps-1-5#step-4-add-emoji-sprite-using-image
+
+
+https://www.youtube.com/watch?v=jMhX8ax1yeQ
