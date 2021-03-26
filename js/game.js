@@ -40,8 +40,8 @@ class preloadGame extends Phaser.Scene{
     }
     preload(){
         this.load.image("platform", "platform.png"); // cargar imagen de plataforma
-        this.load.spritesheet('Knight_run','assets/Character Sprites/Knight_1/Knight_1_RunningSwordShieldAnimation.png',{ frameWidth: 16, frameHeight: 32 });// kanig animacion walk
-        this.load.spritesheet('Knight_jump','assets/Character Sprites/Knight_1/Knight_1_JumpSwordShieldAnimation.png',{ frameWidth: 32, frameHeight: 32 });// knight animacion jump
+        this.load.spritesheet('Knight_run','./assets/Character Sprites/Knight_1/Knight_1_RunningSwordShieldAnimation.png',{ frameWidth: 16, frameHeight: 32 });// kanig animacion walk
+        this.load.spritesheet('Knight_jump','./assets/Character Sprites/Knight_1/Knight_1_JumpSwordShieldAnimation.png',{ frameWidth: 32, frameHeight: 32 });// knight animacion jump
         this.load.spritesheet("coin", "coin.png", {frameWidth: 20,frameHeight: 20}); // sprite monedas
         this.load.spritesheet("mountain", "mountain.png", {frameWidth: 512,frameHeight: 512 }); // sprite montañas
         
